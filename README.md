@@ -1,5 +1,7 @@
 # TIPO-extension [SD-WebUI, ComfyUI, Forge]
 
+👉 This is a fork that adds the ability to use this functionality via an API.
+
 A general extension to utilize TIPO or DanTagGen to do "text-presampling" based on KGen library:
 https://github.com/KohakuBlueleaf/KGen
 

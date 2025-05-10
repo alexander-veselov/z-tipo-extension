@@ -706,3 +706,57 @@ shared.options_templates.update(
         },
     )
 )
+
+
+# /z-tipo/generate-prompt API
+
+from fastapi import APIRouter
+from pydantic import BaseModel
+
+router = APIRouter()
+
+class GeneratePromptRequest(BaseModel):
+    prompt: str
+    nl_prompt = ""
+    aspect_ratio = 1.0
+    seed = -1
+    tag_length = "long"
+    nl_length = "long"
+    ban_tags = ""
+    format_select = "Both, tag first (recommend)"
+    format = TIPO_DEFAULT_FORMAT[format_select]
+    temperature = 0.5
+    top_p = 0.95
+    top_k = 80
+    model = "KBlueLeaf/TIPO-500M-ft | TIPO-500M-ft-F16.gguf"
+    gguf_use_cpu = False
+    no_formatting = False
+    tag_prompt = ""
+
+@router.post("/z-tipo/generate-prompt")
+def generate_prompt(request: GeneratePromptRequest):
+    script = TIPOScript()
+    result = script.prompt_gen_only(
+        request.prompt,
+        request.nl_prompt,
+        request.aspect_ratio,
+        request.seed,
+        request.tag_length,
+        request.nl_length,
+        request.ban_tags,
+        request.format_select,
+        request.format,
+        request.temperature,
+        request.top_p,
+        request.top_k,
+        request.model,
+        request.gguf_use_cpu,
+        request.no_formatting,
+        request.tag_prompt
+    )
+    return { "result": result }
+
+def on_app_started(_, app):
+    app.include_router(router, prefix="", tags=["z-tipo"])
+
+scripts.script_callbacks.on_app_started(on_app_started)
