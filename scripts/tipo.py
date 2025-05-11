@@ -724,7 +724,6 @@ class GeneratePromptRequest(BaseModel):
     nl_length = "long"
     ban_tags = ""
     format_select = "Both, tag first (recommend)"
-    format = TIPO_DEFAULT_FORMAT[format_select]
     temperature = 0.5
     top_p = 0.95
     top_k = 80
@@ -745,7 +744,7 @@ def generate_prompt(request: GeneratePromptRequest):
         request.nl_length,
         request.ban_tags,
         request.format_select,
-        request.format,
+        TIPO_DEFAULT_FORMAT[request.format_select],
         request.temperature,
         request.top_p,
         request.top_k,
